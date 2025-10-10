@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  au-weather-mcp:
+    build: .
+    image: au-weather-mcp:latest
+    container_name: au-weather-mcp
+    stdin_open: true
+    tty: true
+    # The server communicates over stdio
+    # Use with: docker compose run --rm au-weather-mcp

@@ -26,6 +26,22 @@ pip install -e /path/to/au-weather-mcp
 uv pip install -e /path/to/au-weather-mcp
 ```
 
+### Using Docker Desktop
+
+If you prefer to use Docker, you can build and run the server in a container:
+
+```bash
+# Clone the repository
+git clone git@github.com:craigles75/au-weather-mcp.git
+cd au-weather-mcp
+
+# Build the Docker image
+docker build -t au-weather-mcp .
+
+# Or use docker compose
+docker compose build
+```
+
 ## Configuration
 
 ### Claude Desktop
@@ -60,12 +76,33 @@ Or if you're using uv:
 }
 ```
 
+Or if you're using Docker:
+
+```json
+{
+  "mcpServers": {
+    "au-weather": {
+      "command": "docker",
+      "args": ["run", "-i", "--rm", "au-weather-mcp"]
+    }
+  }
+}
+```
+
+**Note**: When using Docker, make sure you've built the image first with `docker build -t au-weather-mcp .` or `docker compose build`.
+
 ### Other MCP Clients
 
 For other MCP clients, configure them to run:
 
+**Python:**
 ```bash
 python /path/to/au-weather-mcp/server.py
+```
+
+**Docker:**
+```bash
+docker run -i --rm au-weather-mcp
 ```
 
 The server communicates over stdio (standard input/output).
@@ -161,11 +198,31 @@ pytest
 
 You can test the server by running it directly:
 
+**Python:**
 ```bash
 python server.py
 ```
 
+**Docker:**
+```bash
+docker run -i --rm au-weather-mcp
+```
+
 The server will start and communicate over stdio. You can send MCP protocol messages to test the tools.
+
+### Building and Running with Docker
+
+```bash
+# Build the image
+docker build -t au-weather-mcp .
+
+# Run the server
+docker run -i --rm au-weather-mcp
+
+# Or using docker compose
+docker compose build
+docker compose run --rm au-weather-mcp
+```
 
 ## Data Source
 

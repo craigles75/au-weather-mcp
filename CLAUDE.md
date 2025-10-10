@@ -59,9 +59,24 @@ Runs test function that checks location search and forecast retrieval.
 pytest
 ```
 
+### Docker commands
+```bash
+# Build the Docker image
+docker build -t au-weather-mcp .
+
+# Run the server in a container
+docker run -i --rm au-weather-mcp
+
+# Using docker compose
+docker compose build
+docker compose run --rm au-weather-mcp
+```
+
 ## MCP Server Testing
 
 To test the server in Claude Desktop, add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
+
+**Python:**
 ```json
 {
   "mcpServers": {
@@ -72,6 +87,19 @@ To test the server in Claude Desktop, add to `~/Library/Application Support/Clau
   }
 }
 ```
+
+**Docker:**
+```json
+{
+  "mcpServers": {
+    "au-weather": {
+      "command": "docker",
+      "args": ["run", "-i", "--rm", "au-weather-mcp"]
+    }
+  }
+}
+```
+Note: Build the Docker image first with `docker build -t au-weather-mcp .`
 
 ## Important Notes
 
