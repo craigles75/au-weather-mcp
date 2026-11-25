@@ -1,3 +1,4 @@
+import sys
 import requests
 import json
 from typing import Optional, Dict, List, Any
@@ -35,24 +36,24 @@ class BOMWeather:
             url = f"{self.BASE_URL}/locations"
             params = {'search': query}
             
-            print(f"Searching for location: {query}")
-            print(f"URL: {url}")
-            print(f"Params: {params}")
+            print(f"Searching for location: {query}", file=sys.stderr)
+            print(f"URL: {url}", file=sys.stderr)
+            print(f"Params: {params}", file=sys.stderr)
             
             response = self.session.get(url, params=params, timeout=10)
-            print(f"Response status: {response.status_code}")
+            print(f"Response status: {response.status_code}", file=sys.stderr)
             
             response.raise_for_status()
             
             data = response.json()
-            print(f"Found {len(data.get('data', []))} locations")
+            print(f"Found {len(data.get('data', []))} locations", file=sys.stderr)
             return data.get('data', [])
             
         except requests.exceptions.Timeout:
-            print(f"Timeout searching for location '{query}'")
+            print(f"Timeout searching for location '{query}'", file=sys.stderr)
             return []
         except requests.exceptions.RequestException as e:
-            print(f"Error searching for location '{query}': {e}")
+            print(f"Error searching for location '{query}': {e}", file=sys.stderr)
             return []
     
     def get_location_geohash(self, query: str) -> Optional[str]:
@@ -89,10 +90,10 @@ class BOMWeather:
             return response.json()
             
         except requests.exceptions.Timeout:
-            print(f"Timeout getting daily forecast for geohash '{geohash}'")
+            print(f"Timeout getting daily forecast for geohash '{geohash}'", file=sys.stderr)
             return {}
         except requests.exceptions.RequestException as e:
-            print(f"Error getting daily forecast for geohash '{geohash}': {e}")
+            print(f"Error getting daily forecast for geohash '{geohash}': {e}", file=sys.stderr)
             return {}
     
     def get_three_hourly_forecast(self, geohash: str) -> Dict[str, Any]:
@@ -114,10 +115,10 @@ class BOMWeather:
             return response.json()
             
         except requests.exceptions.Timeout:
-            print(f"Timeout getting three-hourly forecast for geohash '{geohash}'")
+            print(f"Timeout getting three-hourly forecast for geohash '{geohash}'", file=sys.stderr)
             return {}
         except requests.exceptions.RequestException as e:
-            print(f"Error getting three-hourly forecast for geohash '{geohash}': {e}")
+            print(f"Error getting three-hourly forecast for geohash '{geohash}': {e}", file=sys.stderr)
             return {}
     
     def get_observations(self, geohash: str) -> Dict[str, Any]:
@@ -139,10 +140,10 @@ class BOMWeather:
             return response.json()
             
         except requests.exceptions.Timeout:
-            print(f"Timeout getting observations for geohash '{geohash}'")
+            print(f"Timeout getting observations for geohash '{geohash}'", file=sys.stderr)
             return {}
         except requests.exceptions.RequestException as e:
-            print(f"Error getting observations for geohash '{geohash}': {e}")
+            print(f"Error getting observations for geohash '{geohash}': {e}", file=sys.stderr)
             return {}
     
     def get_weather_for_location(self, location_query: str) -> Dict[str, Any]:
@@ -211,34 +212,34 @@ def test_weather_api():
     """Simple test function to check if the BOM API is accessible."""
     weather = BOMWeather()
     
-    print("Testing BOM Weather API...")
-    print("=" * 50)
+    print("Testing BOM Weather API...", file=sys.stderr)
+    print("=" * 50, file=sys.stderr)
     
     # Test with a simple location search
-    print("1. Testing location search for '3195'...")
+    print("1. Testing location search for '3195'...", file=sys.stderr)
     try:
         locations = weather.search_location("3195")
         if locations:
-            print(f"✓ Found {len(locations)} locations")
+            print(f"✓ Found {len(locations)} locations", file=sys.stderr)
             for i, loc in enumerate(locations[:3]):  # Show first 3
-                print(f"  {i+1}. {loc.get('name', 'Unknown')} (geohash: {loc.get('geohash', 'Unknown')})")
+                print(f"  {i+1}. {loc.get('name', 'Unknown')} (geohash: {loc.get('geohash', 'Unknown')})", file=sys.stderr)
         else:
-            print("✗ No locations found")
+            print("✗ No locations found", file=sys.stderr)
     except Exception as e:
-        print(f"✗ Error: {e}")
+        print(f"✗ Error: {e}", file=sys.stderr)
     
-    print("\n2. Testing with known geohash (r1ppv7u for Parkdale)...")
+    print("\n2. Testing with known geohash (r1ppv7u for Parkdale)...", file=sys.stderr)
     try:
         forecast = weather.get_daily_forecast("r1ppv7u")
         if forecast and 'data' in forecast:
-            print(f"✓ Got forecast data with {len(forecast['data'])} days")
+            print(f"✓ Got forecast data with {len(forecast['data'])} days", file=sys.stderr)
             if forecast['data']:
                 first_day = forecast['data'][0]
-                print(f"  First day: {first_day.get('date', 'Unknown')} - {first_day.get('short_text', 'No description')}")
+                print(f"  First day: {first_day.get('date', 'Unknown')} - {first_day.get('short_text', 'No description')}", file=sys.stderr)
         else:
-            print("✗ No forecast data received")
+            print("✗ No forecast data received", file=sys.stderr)
     except Exception as e:
-        print(f"✗ Error: {e}")
+        print(f"✗ Error: {e}", file=sys.stderr)
 
 
 # Example usage and testing
